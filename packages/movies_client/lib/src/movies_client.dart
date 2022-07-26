@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movies_client/src/models/models.dart';
 
 /// {@template movies_client}
-/// The Client used to make requests to the Movie's API.
+/// The Client used to make requests to the Movie Database API.
 /// {@endtemplate}
 class MoviesClient {
   /// {@macro movies_client}
@@ -85,8 +85,7 @@ class MoviesClient {
   }
 
   /// A method to make the request to the API.
-  Future<T> _get<T>(
-      String endpoint, Map<String, dynamic>? queryParameters) async {
+  Future<T> _get<T>(String endpoint, Map<String, dynamic>? queryParameters) async {
     final url = Uri.https(_authority, endpoint, {
       ...?queryParameters,
       ...defaultParams,
@@ -155,8 +154,7 @@ class HttpRequestFailure implements Exception {
   final String error;
 
   @override
-  String toString() =>
-      'HttpRequestFailure(statusCode: $statusCode, error: $error)';
+  String toString() => 'HttpRequestFailure(statusCode: $statusCode, error: $error)';
 }
 
 /// {@template json_decode_exception}

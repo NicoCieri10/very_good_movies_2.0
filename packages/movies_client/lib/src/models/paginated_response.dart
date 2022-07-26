@@ -15,9 +15,7 @@ class PaginatedResponse<T> {
   });
 
   /// Returns a new [PaginatedResponse] with the given [results].
-  factory PaginatedResponse.fromJson(
-      T Function(Map<String, dynamic> map) itemParser,
-      Map<String, dynamic> json) {
+  factory PaginatedResponse.fromJson(T Function(Map<String, dynamic> map) itemParser, Map<String, dynamic> json) {
     final dates = json['dates'] as Map<String, dynamic>?;
 
     // make sure we're dealing with a JSON map
@@ -29,10 +27,7 @@ class PaginatedResponse<T> {
     final mapResults = json['results'];
 
     if (mapResults is List) {
-      items = mapResults
-          .cast<Map<dynamic, dynamic>>()
-          .map((Map<dynamic, dynamic> item) => item.cast<String, dynamic>())
-          .toList();
+      items = mapResults.cast<Map<dynamic, dynamic>>().map((Map<dynamic, dynamic> item) => item.cast<String, dynamic>()).toList();
     } else if (mapResults is Map) {
       items = [mapResults.cast<String, dynamic>()];
     }
