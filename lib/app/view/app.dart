@@ -1,12 +1,13 @@
+import 'package:appsize/appsize.dart';
 import 'package:credits_repository/credits_repository.dart';
 import 'package:datapersistence_repository/datapersistence_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movies_client/movies_client.dart';
 import 'package:movies_repository/movies_repository.dart';
-import 'package:very_good_movies/counter/counter.dart';
 import 'package:very_good_movies/l10n/l10n.dart';
 
 class PageApp extends StatelessWidget {
@@ -18,7 +19,7 @@ class PageApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final moviesClient = MoviesClient(
       apiKey: dotenv.env['API_KEY'] ?? '',
-      language: 'en-US',
+      language: datapersistenceRepository.language ?? 'en-US',
     );
 
     return MultiRepositoryProvider(
@@ -33,12 +34,28 @@ class PageApp extends StatelessWidget {
   }
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
 
   @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = router();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routeInformationProvider: _router.routeInformationProvider,
+      routeInformationParser: _router.routeInformationParser,
+      routerDelegate: _router.routerDelegate,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
@@ -51,7 +68,33 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      builder: (context, child) => AppSize(
+        builder: (context, orientation, deviceType) => child!,
+      ),
+    );
+  }
+
+  GoRouter router() {
+    return GoRouter(
+      errorBuilder: (context, state) {},
+      routes: <GoRoute>[],
+    );
+  }
+}
+
+class RoutingErrorPage extends StatelessWidget {
+  const RoutingErrorPage(this.path, {super.key});
+  final String? path;
+
+  @override
+  Widget build(BuildContext context) {
+    final phrase = context.l10n.noRoutesForLocation(
+      path ?? context.l10n.unknownPath,
+    );
+    return const Scaffold(
+      body: Center(
+        child: Text('Error'),
+      ),
     );
   }
 }

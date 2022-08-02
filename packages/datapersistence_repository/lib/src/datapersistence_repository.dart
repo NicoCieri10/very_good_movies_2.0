@@ -24,7 +24,7 @@ class DatapersistenceRepository {
 
   /// Method to get the settings [Box].
   Box<dynamic> get settingBox =>
-      Hive.openBox<dynamic>(DatapersistenceRepository._settingBox) as Box;
+      Hive.box<dynamic>(DatapersistenceRepository._settingBox);
 
   /// Method to get the language of the app.
   String? get language =>
