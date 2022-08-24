@@ -16,8 +16,9 @@ class PaginatedResponse<T> {
 
   /// Returns a new [PaginatedResponse] with the given [results].
   factory PaginatedResponse.fromJson(
-      T Function(Map<String, dynamic> map) itemParser,
-      Map<String, dynamic> json) {
+    T Function(Map<String, dynamic> map) itemParser,
+    Map<String, dynamic> json,
+  ) {
     final dates = json['dates'] as Map<String, dynamic>?;
 
     // make sure we're dealing with a JSON map
