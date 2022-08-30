@@ -12,7 +12,10 @@ import 'package:very_good_movies/home/home.dart';
 import 'package:very_good_movies/l10n/l10n.dart';
 
 class PageApp extends StatelessWidget {
-  const PageApp({super.key, required this.datapersistenceRepository});
+  const PageApp({
+    super.key,
+    required this.datapersistenceRepository,
+  });
 
   final DatapersistenceRepository datapersistenceRepository;
 
@@ -20,7 +23,7 @@ class PageApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final moviesClient = MoviesClient(
       apiKey: dotenv.env['API_KEY'] ?? '',
-      language: datapersistenceRepository.language ?? 'en-US',
+      language: datapersistenceRepository.language ?? 'en_US',
     );
 
     return MultiRepositoryProvider(
@@ -83,7 +86,7 @@ class _AppState extends State<App> {
           path: '/',
           name: PageHome.name,
           builder: (context, state) => const PageHome(),
-        )
+        ),
       ],
     );
   }
@@ -91,6 +94,7 @@ class _AppState extends State<App> {
 
 class RoutingErrorPage extends StatelessWidget {
   const RoutingErrorPage(this.path, {super.key});
+
   final String? path;
 
   @override
@@ -98,9 +102,12 @@ class RoutingErrorPage extends StatelessWidget {
     final phrase = context.l10n.noRoutesForLocation(
       path ?? context.l10n.unknownPath,
     );
+
     return Scaffold(
       body: Center(
-        child: Text(phrase),
+        child: Text(
+          phrase,
+        ),
       ),
     );
   }

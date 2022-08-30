@@ -15,5 +15,5 @@
     },
     "internetFailure": "Falla de internet",
     "typeFailure": "La respuesta del servidor no es del tipo esperado",
-    "unknownFailure": "Error desconcido"
+    "unknownFailure": "Error desconocido"
 }
