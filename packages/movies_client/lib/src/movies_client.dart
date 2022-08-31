@@ -72,20 +72,23 @@ class MoviesClient {
   }
 
   /// Method that make the request to get the most popular movies.
-  Future<Credit> getCredits(int page) async {
-    final response = await _get<JSON>('/3/movie/popular', {
+  Future<Credits> getCredits(int page, int movieId) async {
+    final response = await _get<JSON>('/3/movie/$movieId/credits', {
       'page': '$page',
     });
 
     try {
-      return Credit.fromJson(response);
+      return Credits.fromJson(response);
     } catch (e) {
       throw const SpecifiedTypeNotMatchedException();
     }
   }
 
   /// A method to make the request to the API.
-  Future<T> _get<T>(String endpoint, Map<String, dynamic>? queryParameters) async {
+  Future<T> _get<T>(
+    String endpoint,
+    Map<String, dynamic>? queryParameters,
+  ) async {
     final url = Uri.https(_authority, endpoint, {
       ...?queryParameters,
       ...defaultParams,
@@ -154,7 +157,8 @@ class HttpRequestFailure implements Exception {
   final String error;
 
   @override
-  String toString() => 'HttpRequestFailure(statusCode: $statusCode, error: $error)';
+  String toString() =>
+      'HttpRequestFailure(statusCode: $statusCode, error: $error)';
 }
 
 /// {@template json_decode_exception}

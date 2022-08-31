@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:movies_client/movies_client.dart';
 import 'package:movies_repository/movies_repository.dart';
+import 'package:very_good_movies/details/view/details_page.dart';
 import 'package:very_good_movies/home/home.dart';
 import 'package:very_good_movies/l10n/l10n.dart';
 
@@ -86,6 +87,17 @@ class _AppState extends State<App> {
           path: '/',
           name: PageHome.name,
           builder: (context, state) => const PageHome(),
+        ),
+        GoRoute(
+          path: '/details',
+          name: PageDetails.name,
+          builder: (context, state) {
+            final movie = (state.extra as Map?)?['movie'] as Movie?;
+            if (movie == null) {
+              throw ArgumentError.notNull('movie');
+            }
+            return PageDetails(movie);
+          },
         ),
       ],
     );
