@@ -2,6 +2,7 @@ import 'package:appsize/appsize.dart';
 import 'package:credits_repository/credits_repository.dart';
 import 'package:datapersistence_repository/datapersistence_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -53,6 +54,13 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _router = router();
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.light, // For Android (dark icons)
+      ),
+    );
   }
 
   @override
