@@ -1,7 +1,9 @@
+// ignore_for_file: use_setters_to_change_properties
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:movies_client/src/models/models.dart';
+import 'package:movies_client/movies_client.dart';
 
 /// {@template movies_client}
 /// The Client used to make requests to the Movie Database API.
@@ -17,13 +19,18 @@ class MoviesClient {
   final String _apiKey;
 
   /// Language of the movies.
-  String language;
+  Language language;
 
   /// The query parameters used across all requests.
   JSON get defaultParams => {
         'api_key': _apiKey,
-        'language': language,
+        'language': language.iso,
       };
+
+  /// Method to get the popular movies.
+  void changeLanguage(Language language) {
+    this.language = language;
+  }
 
   /// The client used to make requests.
   final _client = http.Client();
@@ -79,6 +86,21 @@ class MoviesClient {
 
     try {
       return Credits.fromJson(response);
+    } catch (e) {
+      throw const SpecifiedTypeNotMatchedException();
+    }
+  }
+
+  /// Method that make the request to get the languages available.
+  Future<List<Language>> getLanguages() async {
+    final response = await _get<List<JSON>>('/3/configuration/languages', {});
+
+    try {
+      final languages = response.map(Language.fromJson).toList()
+        ..sort(
+          (a, b) => a.englishName.compareTo(b.englishName),
+        );
+      return languages;
     } catch (e) {
       throw const SpecifiedTypeNotMatchedException();
     }

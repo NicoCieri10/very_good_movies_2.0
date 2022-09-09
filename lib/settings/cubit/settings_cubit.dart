@@ -1,0 +1,72 @@
+import 'package:bloc/bloc.dart';
+import 'package:credits_repository/credits_repository.dart';
+import 'package:datapersistence_repository/datapersistence_repository.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:movies_client/movies_client.dart';
+import 'package:movies_repository/movies_repository.dart';
+
+part 'settings_state.dart';
+
+abstract class SettingsCubitBase {
+  void toggleDarkMode();
+  void changeLanguage(Language language);
+}
+
+class SettingsCubit extends Cubit<SettingsState> implements SettingsCubitBase {
+  SettingsCubit({
+    required ThemeMode themeMode,
+    required Language language,
+    required DatapersistenceRepository datapersistenceRepository,
+    required MoviesRepository moviesRepository,
+    required CreditsRepository creditsRepository,
+  })  : _datapersistenceRepository = datapersistenceRepository,
+        _moviesRepository = moviesRepository,
+        _creditsRepository = creditsRepository,
+        super(
+          SettingsState(
+            themeMode: themeMode,
+            language: language,
+          ),
+        );
+
+  @override
+  Future<void> changeLanguage(Language language) async {
+    await _datapersistenceRepository.setLanguage(language);
+    _moviesRepository.setLanguage(language);
+    _creditsRepository.setLanguage(language);
+    emit(state.copyWith(language: language));
+  }
+
+  @override
+  Future<void> toggleDarkMode() async {
+    if (state.isDarkMode) {
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.light, // For Android (dark icons)
+        ),
+      );
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.grey.shade700,
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        ),
+      );
+    }
+    await _datapersistenceRepository.toggleDarkMode();
+    emit(
+      state.copyWith(
+        themeMode: state.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+      ),
+    );
+  }
+
+  final DatapersistenceRepository _datapersistenceRepository;
+  final MoviesRepository _moviesRepository;
+  final CreditsRepository _creditsRepository;
+}

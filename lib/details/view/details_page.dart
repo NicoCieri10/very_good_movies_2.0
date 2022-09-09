@@ -67,11 +67,13 @@ class _ViewDetailsState extends State<ViewDetails> {
               slivers: [
                 CustomAppBar(widget.movie),
                 SliverList(
-                  delegate: SliverChildListDelegate([
-                    PosterAndTitle(widget.movie),
-                    Overview(widget.movie),
-                    CastingCards(state.credits),
-                  ]),
+                  delegate: SliverChildListDelegate(
+                    [
+                      PosterAndTitle(widget.movie),
+                      Overview(widget.movie),
+                      CastingCards(state.credits),
+                    ],
+                  ),
                 )
               ],
             );
