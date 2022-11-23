@@ -6,6 +6,7 @@ part of 'language.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+/// This is a language adapter
 class LanguageAdapter extends TypeAdapter<Language> {
   @override
   final int typeId = 0;
